@@ -1,9 +1,9 @@
 <script>
   import { v4 as uuidv4 } from "uuid";
-  import { createEventDispatcher } from "svelte";
   import Card from "./Card.svelte";
   import Button from "./Button.svelte";
   import RatingSelect from "./RatingSelect.svelte";
+  import { FeedbackStore } from "../stores";
 
   let text = "";
   let rating = 10;
@@ -30,7 +30,6 @@
     rating = 10;
   };
 
-  const dispatch = createEventDispatcher();
   const handleSubmit = () => {
     if (text.trim().length > 10) {
       const newFeedback = {
@@ -38,7 +37,7 @@
         text,
         rating: +rating,
       };
-      dispatch("add-feedback", newFeedback);
+      FeedbackStore.update((current) => [newFeedback, ...current]);
       reset();
     }
   };
